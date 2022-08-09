@@ -38,7 +38,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
-
+/*
   deploy:
     needs: build
     name: Deploy
@@ -54,3 +54,4 @@ jobs:
         run: |
           docker stop ${{ env.name }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latelest
           docker run -d -p 80:80 --name cicd --restart always ${{ env.DOCKER_IMAGE }}:latelest
+*/
