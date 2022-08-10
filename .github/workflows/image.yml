@@ -37,7 +37,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ghcr.io/wendyunji/ci-cd:latest
+          tags: ${{ env.DOCKER_IMAGE }}:latest
 
 #   deploy:
 #     needs: build
