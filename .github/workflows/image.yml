@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
 env:
-  DOCKER_IMAGE: ghcr.io/wendyunji/ci-cd
+  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/ownhub
   VERSION: ${{ github.sha }}
   NAME: test_container
 
@@ -14,19 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       - name: Set up docker buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v1
       - name: Cache docker layers
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-latest
+          key: ${{ runner.os }}-buildx-latest${{ env.VERSION }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       - name: Login to ghcr
-        uses: docker/login-action@v2
+        uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -52,6 +52,6 @@ jobs:
           password: ${{ secrets.OWNHUB }}
       - name: Docker run
         run: |
-          docker stop ${{ env.name }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latelest
-          docker run -d -p 80:80 --name cicd --restart always ${{ env.DOCKER_IMAGE }}:latelest
+          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 80:80 --name test_container --restart always ${{ env.DOCKER_IMAGE }}:latest
 
