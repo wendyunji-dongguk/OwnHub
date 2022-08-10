@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
 env:
-  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/ci-cd
+  DOCKER_IMAGE: ghcr.io/wendyunji/ci-cd
   VERSION: ${{ github.sha }}
   NAME: test_container
 
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up docker buildx
         id: buildx
         uses: docker/setup-buildx-action@v1
@@ -22,7 +22,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-latest
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
       - name: Login to ghcr
